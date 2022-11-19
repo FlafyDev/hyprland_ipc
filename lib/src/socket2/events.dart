@@ -53,7 +53,7 @@ class WorkspaceEvent implements Event {
   WorkspaceEvent.fromArgs(List<String> args) : workspaceName = args[0];
 }
 
-class FocusedMonitorEvent extends Event {
+class FocusedMonitorEvent implements Event {
   final String monitorName;
   final String workspaceName;
 
@@ -67,7 +67,7 @@ class FocusedMonitorEvent extends Event {
         workspaceName = args[1];
 }
 
-class ActiveWindowEvent extends Event {
+class ActiveWindowEvent implements Event {
   final String windowClass;
   final String windowTitle;
 
@@ -81,7 +81,7 @@ class ActiveWindowEvent extends Event {
         windowTitle = args[1];
 }
 
-class FullscreenEvent extends Event {
+class FullscreenEvent implements Event {
   final bool fullscreen;
 
   FullscreenEvent({
@@ -91,7 +91,7 @@ class FullscreenEvent extends Event {
   FullscreenEvent.fromArgs(List<String> args) : fullscreen = args[0] == "1";
 }
 
-class MonitorRemovedEvent extends Event {
+class MonitorRemovedEvent implements Event {
   final String monitorName;
 
   MonitorRemovedEvent({
@@ -101,7 +101,7 @@ class MonitorRemovedEvent extends Event {
   MonitorRemovedEvent.fromArgs(List<String> args) : monitorName = args[0];
 }
 
-class MonitorAddedEvent extends Event {
+class MonitorAddedEvent implements Event {
   final String monitorName;
 
   MonitorAddedEvent({
@@ -111,7 +111,7 @@ class MonitorAddedEvent extends Event {
   MonitorAddedEvent.fromArgs(List<String> args) : monitorName = args[0];
 }
 
-class CreateWorkspaceEvent extends Event {
+class CreateWorkspaceEvent implements Event {
   final String workspaceName;
 
   CreateWorkspaceEvent({
@@ -120,7 +120,7 @@ class CreateWorkspaceEvent extends Event {
   CreateWorkspaceEvent.fromArgs(List<String> args) : workspaceName = args[0];
 }
 
-class DestroyWorkspaceEvent extends Event {
+class DestroyWorkspaceEvent implements Event {
   final String workspaceName;
 
   DestroyWorkspaceEvent({
@@ -130,7 +130,7 @@ class DestroyWorkspaceEvent extends Event {
   DestroyWorkspaceEvent.fromArgs(List<String> args) : workspaceName = args[0];
 }
 
-class MoveWorkspaceEvent extends Event {
+class MoveWorkspaceEvent implements Event {
   final String workspaceName;
   final String monitorName;
 
@@ -144,7 +144,7 @@ class MoveWorkspaceEvent extends Event {
         monitorName = args[1];
 }
 
-class ActiveLayoutEvent extends Event {
+class ActiveLayoutEvent implements Event {
   final String keyboardName;
   final String layoutName;
 
@@ -158,7 +158,7 @@ class ActiveLayoutEvent extends Event {
         layoutName = args[1];
 }
 
-class OpenWindowEvent extends Event {
+class OpenWindowEvent implements Event {
   final int windowAddress;
   final String workspaceName;
   final String windowClass;
@@ -178,7 +178,7 @@ class OpenWindowEvent extends Event {
         windowTitle = args[3];
 }
 
-class CloseWindowEvent extends Event {
+class CloseWindowEvent implements Event {
   final int windowAddress;
 
   CloseWindowEvent({
@@ -189,7 +189,7 @@ class CloseWindowEvent extends Event {
       : windowAddress = int.parse(args[0], radix: 16);
 }
 
-class MoveWindowEvent extends Event {
+class MoveWindowEvent implements Event {
   final int windowAddress;
   final String workspaceName;
 
@@ -203,7 +203,7 @@ class MoveWindowEvent extends Event {
         workspaceName = args[1];
 }
 
-class OpenLayerEvent extends Event {
+class OpenLayerEvent implements Event {
   final String namespace;
 
   OpenLayerEvent({
@@ -213,7 +213,7 @@ class OpenLayerEvent extends Event {
   OpenLayerEvent.fromArgs(List<String> args) : namespace = args[0];
 }
 
-class CloseLayerEvent extends Event {
+class CloseLayerEvent implements Event {
   final String namespace;
 
   CloseLayerEvent({
@@ -223,7 +223,7 @@ class CloseLayerEvent extends Event {
   CloseLayerEvent.fromArgs(List<String> args) : namespace = args[0];
 }
 
-class SubmapEvent extends Event {
+class SubmapEvent implements Event {
   final String submapName;
 
   SubmapEvent({
