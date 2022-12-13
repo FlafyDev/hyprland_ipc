@@ -16,7 +16,7 @@ class HyprlandIPC {
     required FutureOr<Socket> Function() createSocketConnection,
     required this.socket2,
   }) : _createSocketConnection = createSocketConnection {
-    _eventsStream = _createEventsStream();
+    _eventsStream = _createEventsStream().asBroadcastStream();
   }
 
   final FutureOr<Socket> Function() _createSocketConnection;
@@ -55,13 +55,32 @@ class HyprlandIPC {
     await _runCommand("keyword $keyword $arg");
   }
 
-  Future<void> addWindowRules(
-    WindowRef window, {
+  String _boolToNum(bool b) => b ? "1" : "0";
+
+  Future<void> addWindowRules({
+    String? titleRegex,
+    String? classRegex,
+    bool? xwayland,
+    bool? floating,
+    bool? fullscreen,
+    bool? pinned,
     required List<WindowRule> windowRules,
   }) async {
-    await _runCommand(
-      "keyword windowrule ${windowRules.first.convert()},$window",
-    );
+    final fields = [
+      if (titleRegex != null) "title:$titleRegex",
+      if (classRegex != null) "class:$classRegex",
+      if (xwayland != null) "xwayland ${_boolToNum(xwayland)}",
+      if (floating != null) "floating ${_boolToNum(floating)}",
+      if (fullscreen != null) "fullscreen ${_boolToNum(fullscreen)}",
+      if (pinned != null) "pinned ${_boolToNum(pinned)}",
+    ].join(",");
+    assert(fields.isNotEmpty);
+    for (final rule in windowRules) {
+      await _runCommand(
+        "keyword windowrulev2 ${rule.convert()},$fields",
+      );
+      print("keyword windowrulev2 ${rule.convert()},$fields");
+    }
   }
 
   Future<void> executeShellCommand(

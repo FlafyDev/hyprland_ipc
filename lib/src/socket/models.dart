@@ -210,25 +210,67 @@ class MonitorRefRelativeID implements MonitorRef {
   String toString() => _numToStringWithSymbol(id);
 }
 
+// abstract class WindowRuleWindowRef {
+//   @override
+//   String toString();
+// }
+//
+// class WindowRuleWindowRefTitle implements WindowRuleWindowRef {
+//   final String title;
+//
+//   WindowRuleWindowRefTitle(this.title);
+//
+//   @override
+//   String toString() => "title:$title";
+// }
+//
+// class WindowRuleWindowRefClass implements WindowRuleWindowRef {
+//   final String classRegex;
+//
+//   WindowRuleWindowRefClass(this.classRegex);
+//
+//   @override
+//   String toString() => "class:$classRegex";
+// }
+//
+// class WindowRuleWindowRefXWayland implements WindowRuleWindowRef {
+//   final bool xWayland;
+//
+//   WindowRuleWindowRefXWayland(this.xWayland);
+//
+//   @override
+//   String toString() => "xwayland ${xWayland ? "0" : "1"}";
+// }
+//
+// class WindowRuleWindowRefFloating implements WindowRuleWindowRef {
+//   final bool xWayland;
+//
+//   WindowRuleWindowRefXWayland(this.xWayland);
+//
+//   @override
+//   String toString() => "xwayland ${xWayland ? "0" : "1"}";
+// }
+
 abstract class WindowRef {
   @override
   String toString();
 }
 
 class WindowRefClass implements WindowRef {
-  WindowRefClass(this.className);
-  final String className;
+  WindowRefClass(this.classRegex);
+  final String classRegex;
 
   @override
-  String toString() => className;
+  String toString() => classRegex;
+  String withFieldName() => "class:$classRegex";
 }
 
 class WindowRefTitle implements WindowRef {
-  WindowRefTitle(this.title);
-  final String title;
+  WindowRefTitle(this.titleRegex);
+  final String titleRegex;
 
   @override
-  String toString() => "title:$title";
+  String toString() => "title:$titleRegex";
 }
 
 class WindowRefPid implements WindowRef {
