@@ -44,9 +44,7 @@ class HyprlandIPC {
       for (String event in events) {
         try {
           yield Event.fromString(event);
-        } on Exception catch (e) {
-          throw Exception(["Couldn't parse event: $event", e]);
-        }
+        } on UnknownHyprlandEventException catch (e) { }
       }
     }
   }

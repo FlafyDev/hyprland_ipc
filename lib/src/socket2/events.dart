@@ -37,10 +37,17 @@ abstract class Event {
         return CloseLayerEvent.fromArgs(args);
       case "submap":
         return SubmapEvent.fromArgs(args);
+      case "changefloatingmode":
+        return ChangeFloatingModeEvent.fromArgs(args);
       default:
-        throw Exception("Unknown Hyprland event: \"$event\"");
+        throw UnknownHyprlandEventException(event);
     }
   }
+}
+
+class UnknownHyprlandEventException implements Exception {
+  final String event;
+  UnknownHyprlandEventException(this.event);
 }
 
 class WorkspaceEvent implements Event {
@@ -231,4 +238,18 @@ class SubmapEvent implements Event {
   });
 
   SubmapEvent.fromArgs(List<String> args) : submapName = args[0];
+}
+
+class ChangeFloatingModeEvent implements Event {
+  final int windowAddress;
+  final bool floating;
+
+  ChangeFloatingModeEvent({
+    required this.windowAddress,
+    required this.floating,
+  });
+
+  ChangeFloatingModeEvent.fromArgs(List<String> args)
+      : windowAddress = int.parse(args[0], radix: 16),
+        floating = args[1] == "1";
 }
