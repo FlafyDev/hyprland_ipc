@@ -12,3 +12,6 @@ pubspec.lock
 # Nix
 result
 .direnv
+
+*.g.dart
+*.freezed.dart

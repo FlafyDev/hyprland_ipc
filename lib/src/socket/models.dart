@@ -1,4 +1,75 @@
 import 'dart:math';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'models.freezed.dart';
+// optional: Since our Person class is serializable, we must add this line.
+// But if Person was not serializable, we could skip it.
+part 'models.g.dart';
+
+class _EmptyRect implements JsonConverter<Rectangle, dynamic> {
+  const _EmptyRect();
+
+  @override
+  Rectangle fromJson(dynamic _) {
+    return Rectangle(0, 0, 0, 0);
+  }
+
+  @override
+  dynamic toJson(Rectangle object) {
+    throw UnimplementedError();
+  }
+}
+
+class _WindowRefAddressNullableConverter implements JsonConverter<WindowRefAddress?, String> {
+  const _WindowRefAddressNullableConverter();
+
+  @override
+  WindowRefAddress? fromJson(String json) {
+    print(json);
+    if (json == "0x0") {
+      return null;
+    }
+    return WindowRefAddress.fromJson(json);
+  }
+
+  @override
+  String toJson(WindowRefAddress? object) {
+    throw UnimplementedError();
+  }
+}
+
+class _RectConverter<T extends num> implements JsonConverter<Rectangle<T>, Map<String, dynamic>> {
+  const _RectConverter();
+
+  @override
+  Rectangle<T> fromJson(Map<String, dynamic> json) {
+    if (json.containsKey('x')) {
+      return Rectangle<T>(
+        json['x'] as T,
+        json['y'] as T,
+        json['width'] as T,
+        json['height'] as T,
+      );
+    } else {
+      return Rectangle<T>(
+        json['at'][0] as T,
+        json['at'][1] as T,
+        json['size'][0] as T,
+        json['size'][1] as T,
+      );
+    }
+  }
+
+  @override
+  Map<String, dynamic> toJson(Rectangle<T> object) {
+    return {
+      'x': object.left,
+      'y': object.top,
+      'width': object.width,
+      'height': object.height,
+    };
+  }
+}
 
 // abstract class Device {
 //   abstract final int address;
@@ -109,6 +180,9 @@ abstract class WorkspaceRef {
   String toString();
 }
 
+// TODO: workspacerefs move to freezed.
+// TODO: update workspacerefs with upstream wiki
+
 class WorkspaceRefID implements WorkspaceRef {
   final String id;
 
@@ -169,42 +243,64 @@ abstract class MonitorRef {
   String toString();
 }
 
-class MonitorRefDirection implements MonitorRef {
-  final Direction direction;
+@freezed
+class MonitorRefDirection with _$MonitorRefDirection implements MonitorRef {
+  const factory MonitorRefDirection({
+    required Direction direction,
+  }) = _MonitorRefDirection;
+  const MonitorRefDirection._();
 
-  MonitorRefDirection(this.direction);
+  factory MonitorRefDirection.fromJson(dynamic json) => throw UnimplementedError();
 
   @override
   String toString() => direction.name;
 }
 
-class MonitorRefID implements MonitorRef {
-  final String id;
+@freezed
+class MonitorRefID with _$MonitorRefID implements MonitorRef {
+  const factory MonitorRefID({
+    required int id,
+  }) = _MonitorRefID;
+  const MonitorRefID._();
 
-  MonitorRefID(this.id);
+  factory MonitorRefID.fromJson(int json) => MonitorRefID(id: json);
 
   @override
-  String toString() => id;
+  String toString() => id.toString();
 }
 
-class MonitorRefName implements MonitorRef {
-  final String name;
+@freezed
+class MonitorRefName with _$MonitorRefName implements MonitorRef {
+  const factory MonitorRefName({
+    required String name,
+  }) = _MonitorRefName;
+  const MonitorRefName._();
 
-  MonitorRefName(this.name);
+  factory MonitorRefName.fromJson(dynamic json) => throw UnimplementedError();
 
   @override
   String toString() => name;
 }
 
-class MonitorRefCurrent implements MonitorRef {
+@freezed
+class MonitorRefCurrent with _$MonitorRefCurrent implements MonitorRef {
+  const factory MonitorRefCurrent() = _MonitorRefCurrent;
+  const MonitorRefCurrent._();
+
+  factory MonitorRefCurrent.fromJson(Map<String, Object?> json) => _$MonitorRefCurrentFromJson(json);
+
   @override
   String toString() => "current";
 }
 
-class MonitorRefRelativeID implements MonitorRef {
-  final int id;
+@freezed
+class MonitorRefRelativeID with _$MonitorRefRelativeID implements MonitorRef {
+  const factory MonitorRefRelativeID({
+    required int id,
+  }) = _MonitorRefRelativeID;
+  const MonitorRefRelativeID._();
 
-  MonitorRefRelativeID(this.id);
+  factory MonitorRefRelativeID.fromJson(dynamic json) => throw UnimplementedError();
 
   @override
   String toString() => _numToStringWithSymbol(id);
@@ -253,40 +349,120 @@ class MonitorRefRelativeID implements MonitorRef {
 
 abstract class WindowRef {
   @override
-  String toString();
+  String toString() => throw UnimplementedError();
 }
 
-class WindowRefClass implements WindowRef {
-  WindowRefClass(this.classRegex);
-  final String classRegex;
+@freezed
+class WindowRefClass with _$WindowRefClass implements WindowRef {
+  const factory WindowRefClass({
+    required String classRegex,
+  }) = _WindowRefClass;
+  const WindowRefClass._();
+
+  factory WindowRefClass.fromJson(dynamic json) => throw UnimplementedError();
 
   @override
-  String toString() => classRegex;
-  String withFieldName() => "class:$classRegex";
+  String toString() => "class:$classRegex";
 }
 
-class WindowRefTitle implements WindowRef {
-  WindowRefTitle(this.titleRegex);
-  final String titleRegex;
+@freezed
+class WindowRefInitialClass with _$WindowRefInitialClass implements WindowRef {
+  const factory WindowRefInitialClass({
+    required String classRegex,
+  }) = _WindowRefInitialClass;
+  const WindowRefInitialClass._();
+
+  factory WindowRefInitialClass.fromJson(dynamic json) => throw UnimplementedError();
+
+  @override
+  String toString() => "initialclass:$classRegex";
+}
+
+@freezed
+class WindowRefTitle with _$WindowRefTitle implements WindowRef {
+  const factory WindowRefTitle({
+    required String titleRegex,
+  }) = _WindowRefTitle;
+  const WindowRefTitle._();
+
+  factory WindowRefTitle.fromJson(dynamic json) => throw UnimplementedError();
 
   @override
   String toString() => "title:$titleRegex";
 }
 
-class WindowRefPid implements WindowRef {
-  WindowRefPid(this.pid);
-  final int pid;
+@freezed
+class WindowRefInitialTitle with _$WindowRefInitialTitle implements WindowRef {
+  const factory WindowRefInitialTitle({
+    required String titleRegex,
+  }) = _WindowRefInitialTitle;
+  const WindowRefInitialTitle._();
+
+  factory WindowRefInitialTitle.fromJson(dynamic json) => throw UnimplementedError();
+
+  @override
+  String toString() => "initialtitle:$titleRegex";
+}
+
+@freezed
+class WindowRefPid with _$WindowRefPid implements WindowRef {
+  const factory WindowRefPid({
+    required int pid,
+  }) = _WindowRefPid;
+  const WindowRefPid._();
+
+  factory WindowRefPid.fromJson(dynamic json) => WindowRefPid(pid: json as int);
 
   @override
   String toString() => "pid:$pid";
 }
 
-class WindowRefAddress implements WindowRef {
-  WindowRefAddress(this.address);
-  final int address;
+@freezed
+class WindowRefAddress with _$WindowRefAddress implements WindowRef {
+  const factory WindowRefAddress({
+    required int address,
+  }) = _WindowRefAddress;
+  const WindowRefAddress._();
+
+  factory WindowRefAddress.fromJson(String json) => WindowRefAddress(
+        address: int.parse(json.split("0x")[1], radix: 16),
+      );
 
   @override
   String toString() => "address:0x${address.toRadixString(16)}";
+}
+
+@freezed
+class WindowRefActiveWindow with _$WindowRefActiveWindow implements WindowRef {
+  const factory WindowRefActiveWindow() = _WindowRefActiveWindow;
+  const WindowRefActiveWindow._();
+
+  factory WindowRefActiveWindow.fromJson(String json) => throw UnimplementedError();
+
+  @override
+  String toString() => "activewindow";
+}
+
+@freezed
+class WindowRefFirstFloating with _$WindowRefFirstFloating implements WindowRef {
+  const factory WindowRefFirstFloating() = _WindowRefFirstFloating;
+  const WindowRefFirstFloating._();
+
+  factory WindowRefFirstFloating.fromJson(String json) => throw UnimplementedError();
+
+  @override
+  String toString() => "floating";
+}
+
+@freezed
+class WindowRefFirstTiled with _$WindowRefFirstTiled implements WindowRef {
+  const factory WindowRefFirstTiled() = _WindowRefFirstTiled;
+  const WindowRefFirstTiled._();
+
+  factory WindowRefFirstTiled.fromJson(String json) => throw UnimplementedError();
+
+  @override
+  String toString() => "tiled";
 }
 
 enum LayerSurfaceLevel {
@@ -296,9 +472,19 @@ enum LayerSurfaceLevel {
   overlay,
 }
 
+enum TurnMode {
+  on,
+  off,
+  toggle,
+}
+
 enum FullscreenMode {
+  @JsonValue(0)
   full,
+  @JsonValue(1)
   maximized,
+  @JsonValue(2)
+  fullExternalOnly,
 }
 
 class LayerSurface {
@@ -317,88 +503,123 @@ class LayerSurface {
   });
 }
 
-class Monitor {
-  final int id;
-  final String name;
-  final String description;
-  final Rectangle rect;
-  final double refreshRate;
-  final int activeWorkspaceId;
-  final String activeWorkspaceName;
-  final Rectangle reserved;
-  final double scale;
-  final int transform;
-  final bool focused;
-  final bool dpmsStatus;
+@Freezed(toJson: false)
+class MonitorInfoReserved with _$MonitorInfoReserved {
+  const factory MonitorInfoReserved({
+    required int left,
+    required int top,
+    required int right,
+    required int bottom,
+  }) = _MonitorInfoReserved;
 
-  Monitor({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.rect,
-    required this.refreshRate,
-    required this.activeWorkspaceId,
-    required this.activeWorkspaceName,
-    required this.reserved,
-    required this.scale,
-    required this.transform,
-    required this.focused,
-    required this.dpmsStatus,
-  });
-
-  Monitor.fromSocketJson(Map<String, dynamic> json)
-      : id = json["id"] as int,
-        name = json["name"] as String,
-        description = json["description"] as String,
-        rect = Rectangle(
-          json["x"] as int,
-          json["y"] as int,
-          json["width"] as int,
-          json["height"] as int,
-        ),
-        refreshRate = json["refreshRate"] as double,
-        activeWorkspaceId = json["activeWorkspace"]["id"] as int,
-        activeWorkspaceName = json["activeWorkspace"]["name"] as String,
-        reserved = Rectangle.fromPoints(
-          Point(json["reserved"][0], json["reserved"][1]),
-          Point(json["reserved"][2], json["reserved"][3]),
-        ),
-        scale = json["scale"] as double,
-        transform = json["transform"] as int,
-        focused = json["focused"] as bool,
-        dpmsStatus = json["dpmsStatus"] as bool;
+  factory MonitorInfoReserved.fromJson(List<dynamic> json) => MonitorInfoReserved(
+        left: json[0] as int,
+        top: json[1] as int,
+        right: json[2] as int,
+        bottom: json[3] as int,
+      );
 }
 
-class Workspace {
-  final int id;
-  final String name;
-  final String monitorName;
-  final int windowsCount;
-  final bool hasFullscreen;
-  final int lastWindowAddress;
-  final String lastWindowTitle;
+@Freezed(toJson: false)
+class MonitorInfoWorkspace with _$MonitorInfoWorkspace {
+  const factory MonitorInfoWorkspace({
+    // required WorkspaceRefID id, // TODO: move them to freezed and make tojson
+    // required WorkspaceRefName name, // TODO: move them to freezed and make tojson
+    required int id,
+    required String name,
+  }) = _MonitorInfoWorkspace;
 
-  Workspace({
-    required this.id,
-    required this.name,
-    required this.monitorName,
-    required this.windowsCount,
-    required this.hasFullscreen,
-    required this.lastWindowAddress,
-    required this.lastWindowTitle,
-  });
+  factory MonitorInfoWorkspace.fromJson(Map<String, Object?> json) => _$MonitorInfoWorkspaceFromJson(json);
+}
 
-  Workspace.fromSocketJson(Map<String, dynamic> json)
-      : id = json["id"] as int,
-        name = json["name"] as String,
-        monitorName = json["monitor"] as String,
-        windowsCount = json["windows"] as int,
-        hasFullscreen = json["hasfullscreen"] as bool,
-        lastWindowAddress = int.parse(
-          (json["lastwindow"] as String).substring(2),
-          radix: 16,
-        ),
-        lastWindowTitle = json["lastwindowtitle"];
+@Freezed(toJson: false)
+class MonitorInfoMode with _$MonitorInfoMode {
+  const factory MonitorInfoMode({
+    required int width,
+    required int height,
+    required double refreshRate,
+  }) = _MonitorInfoMode;
+
+  factory MonitorInfoMode.fromJson(String json) => MonitorInfoMode(
+        width: int.parse(json.split("x")[0]),
+        height: int.parse(json.split("x")[1].split("@")[0]),
+        refreshRate: double.parse(json.split("@")[1].split("Hz")[0]),
+      );
+}
+
+@Freezed(toJson: false)
+class MonitorInfo with _$MonitorInfo {
+  const factory MonitorInfo({
+    required int id,
+    required String name,
+    required String description,
+    required String model,
+    required double refreshRate,
+    @_EmptyRect() required Rectangle rect,
+    required MonitorInfoWorkspace activeWorkspace,
+    required MonitorInfoWorkspace specialWorkspace,
+    required MonitorInfoReserved reserved,
+    required double scale,
+    required MonitorTransform transform,
+    required bool focused,
+    required bool dpmsStatus,
+    required bool vrr,
+    required bool activelyTearing,
+    required bool disabled,
+    required String currentFormat,
+    required List<MonitorInfoMode> availableModes,
+  }) = _MonitorInfo;
+
+  factory MonitorInfo.fromJson(Map<String, Object?> json) => _$MonitorInfoFromJson(json).copyWith(
+        rect: _RectConverter().fromJson(json),
+      );
+}
+
+@Freezed(toJson: false)
+class WorkspaceInfo with _$WorkspaceInfo {
+  const factory WorkspaceInfo({
+    required int id,
+    required String name,
+    required String monitor,
+    required int monitorID,
+    @JsonKey(name: "hasfullscreen") required bool hasFullscreen,
+    @JsonKey(name: "lastwindow") required WindowRefAddress lastWindow,
+    @JsonKey(name: "lastwindowtitle") required String lastWindowTitle,
+  }) = _WorkspaceInfo;
+
+  factory WorkspaceInfo.fromJson(Map<String, Object?> json) => _$WorkspaceInfoFromJson(json);
+}
+
+typedef ClientInfoWorkspace = MonitorInfoWorkspace;
+
+@Freezed(toJson: false)
+class ClientInfo with _$ClientInfo {
+  const factory ClientInfo({
+    required WindowRefAddress address,
+    @_EmptyRect() required Rectangle rect,
+    required bool mapped,
+    required bool hidden,
+    required ClientInfoWorkspace workspace,
+    required bool floating,
+    required MonitorRefID monitor,
+    @JsonKey(name: "class") required String className,
+    required String title,
+    required String initialClass,
+    required String initialTitle,
+    required WindowRefPid pid,
+    required bool xwayland,
+    required bool pinned,
+    required bool fullscreen,
+    required FullscreenMode fullscreenMode,
+    required bool fakeFullscreen,
+    required List<WindowRefAddress> grouped,
+    @_WindowRefAddressNullableConverter() required WindowRefAddress? swallowing,
+    required int focusHistoryID,
+  }) = _ClientInfo;
+
+  factory ClientInfo.fromJson(Map<String, Object?> json) => _$ClientInfoFromJson(json).copyWith(
+        rect: _RectConverter().fromJson(json),
+      );
 }
 
 class Client {
@@ -463,19 +684,88 @@ enum Corner {
   topLeft,
 }
 
-enum WorkspaceOption {
-  allFloat,
-  allPseudo,
+enum AlterZOrder {
+  top,
+  bottom,
 }
 
-extension WorkspaceOptionExtension on WorkspaceOption {
-  String get value {
-    switch (this) {
-      case WorkspaceOption.allFloat:
-        return "allfloat";
-      case WorkspaceOption.allPseudo:
-        return "allpseudo";
-    }
+enum GroupLockStatus {
+  lock,
+  unlock,
+  toggle,
+}
+
+abstract class Resize {
+  const Resize();
+  @override
+  String toString() => throw UnimplementedError();
+}
+
+class ResizeSet extends Resize {
+  final int width;
+  final int height;
+
+  const ResizeSet({
+    required this.width,
+    required this.height,
+  });
+
+  @override
+  String toString() {
+    return "exact $width $height";
+  }
+}
+
+class ResizeAdd extends Resize {
+  final int width;
+  final int height;
+
+  const ResizeAdd({
+    required this.width,
+    required this.height,
+  });
+
+  @override
+  String toString() {
+    return "$width $height";
+  }
+}
+
+class ResizeFactor extends Resize {
+  final double widthFactor;
+  final double heightFactor;
+
+  const ResizeFactor({
+    required this.widthFactor,
+    required this.heightFactor,
+  });
+
+  String toPercentage(double value) {
+    return (value * 100).round().toString();
+  }
+
+  @override
+  String toString() {
+    return "${toPercentage(widthFactor)}% ${toPercentage(heightFactor)}%";
+  }
+}
+
+class ResizeMonitorFactor extends Resize {
+  final double widthFactor;
+  final double heightFactor;
+
+  const ResizeMonitorFactor({
+    required this.widthFactor,
+    required this.heightFactor,
+  });
+
+  String toPercentage(double value) {
+    return (value * 100).round().toString();
+  }
+
+  @override
+  String toString() {
+    return "exact ${toPercentage(widthFactor)}% ${toPercentage(heightFactor)}%";
   }
 }
 
@@ -484,6 +774,13 @@ enum Direction {
   right,
   up,
   down,
+}
+
+enum SuppressEventEvents {
+  fullscreen,
+  maximize,
+  activate,
+  activatefocus,
 }
 
 extension DirectionExtension on Direction {
@@ -522,4 +819,139 @@ class HyprlandVersion {
         dirty = json['dirty'],
         commitMessage = json['commit_message'],
         flags = List<String>.from(json['flags']);
+}
+
+abstract class GroupOption {
+  const GroupOption();
+  @override
+  String toString() => throw UnimplementedError();
+}
+
+class GroupOptionSet extends GroupOption {
+  const GroupOptionSet({
+    this.always = false,
+  });
+
+  final bool always;
+
+  @override
+  String toString() => "set ${always ? "always" : ""}";
+}
+
+class GroupOptionNew extends GroupOption {
+  const GroupOptionNew();
+  @override
+  String toString() => "new";
+}
+
+class GroupOptionLock extends GroupOption {
+  const GroupOptionLock({
+    this.always = false,
+  });
+
+  final bool always;
+
+  @override
+  String toString() => "lock ${always ? "always" : ""}";
+}
+
+class GroupOptionBarred extends GroupOption {
+  const GroupOptionBarred();
+  @override
+  String toString() => "barred";
+}
+
+class GroupOptionDeny extends GroupOption {
+  const GroupOptionDeny();
+  @override
+  String toString() => "deny";
+}
+
+class GroupOptionInvade extends GroupOption {
+  const GroupOptionInvade();
+  @override
+  String toString() => "invade";
+}
+
+class GroupOptionOverride extends GroupOption {
+  const GroupOptionOverride({
+    required this.options,
+  });
+  final List<GroupOption> options;
+  @override
+  String toString() => "override ${options.join(" ")}";
+}
+
+class GroupOptionUnset extends GroupOption {
+  const GroupOptionUnset();
+  @override
+  String toString() => "unset";
+}
+
+class GradientColor {
+  const GradientColor({
+    required this.colors,
+    required this.angle,
+  });
+
+  final List<int> colors;
+
+  /// In radians
+  final double angle;
+
+  @override
+  String toString() {
+    return "bordercolor ${colors.map((c) => c.toRadixString(16)).join(" ")} ${(angle / (2 * pi) * 360).round()}deg";
+  }
+}
+
+enum IdleInhibitMode {
+  none,
+  always,
+  focus,
+  fullscreen,
+}
+
+enum XRayRuleMode {
+  off("0"),
+  on("1"),
+  unset("unset");
+
+  const XRayRuleMode(this.value);
+  final String value;
+}
+
+enum OutputBackend {
+  wayland,
+  x11,
+  headless,
+  auto,
+}
+
+enum NotifyIcon {
+  warning,
+  info,
+  hint,
+  error,
+  confused,
+  ok,
+}
+
+enum MonitorTransform {
+  @JsonValue(0)
+  normal,
+  @JsonValue(1)
+  rotate90,
+  @JsonValue(3)
+  rotate180,
+  @JsonValue(4)
+  rotate270,
+  @JsonValue(5)
+  flipped,
+  @JsonValue(6)
+  flippedRotate90,
+  @JsonValue(7)
+  flippedRotate180,
+  @JsonValue(8)
+  flippedRotate270,
 }
