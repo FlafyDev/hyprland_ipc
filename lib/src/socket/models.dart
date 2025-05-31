@@ -25,7 +25,6 @@ class _WindowRefAddressNullableConverter implements JsonConverter<WindowRefAddre
 
   @override
   WindowRefAddress? fromJson(String json) {
-    print(json);
     if (json == "0x0") {
       return null;
     }
@@ -478,13 +477,17 @@ enum TurnMode {
   toggle,
 }
 
-enum FullscreenMode {
+enum FullscreenState {
+  @JsonValue("*")
+  any,
   @JsonValue(0)
-  full,
+  none,
   @JsonValue(1)
-  maximized,
+  maximize,
   @JsonValue(2)
-  fullExternalOnly,
+  fullscreen,
+  @JsonValue(3)
+  maximizeAndFullscreen,
 }
 
 class LayerSurface {
@@ -601,6 +604,7 @@ class ClientInfo with _$ClientInfo {
     required bool hidden,
     required ClientInfoWorkspace workspace,
     required bool floating,
+    required bool pseudo,
     required MonitorRefID monitor,
     @JsonKey(name: "class") required String className,
     required String title,
@@ -609,10 +613,10 @@ class ClientInfo with _$ClientInfo {
     required WindowRefPid pid,
     required bool xwayland,
     required bool pinned,
-    required bool fullscreen,
-    required FullscreenMode fullscreenMode,
-    required bool fakeFullscreen,
+    required int fullscreen,
+    required FullscreenState fullscreenClient,
     required List<WindowRefAddress> grouped,
+    // TODO: tags, focusHistoryID, inhibitingIdle, xdgTag, xdgDescription
     @_WindowRefAddressNullableConverter() required WindowRefAddress? swallowing,
     required int focusHistoryID,
   }) = _ClientInfo;
@@ -634,8 +638,8 @@ class Client {
   final int pid;
   final bool xwayland;
   final bool pinned;
-  final bool fullscreen;
-  final FullscreenMode fullscreenMode;
+  final int fullscreen;
+  final FullscreenState fullscreenClient;
 
   Client({
     required this.address,
@@ -650,7 +654,7 @@ class Client {
     required this.xwayland,
     required this.pinned,
     required this.fullscreen,
-    required this.fullscreenMode,
+    required this.fullscreenClient,
   });
 
   Client.fromSocketJson(Map<String, dynamic> json)
@@ -673,8 +677,8 @@ class Client {
         pid = json["pid"] as int,
         xwayland = json["xwayland"] as bool,
         pinned = json["pinned"] as bool,
-        fullscreen = json["fullscreen"] as bool,
-        fullscreenMode = FullscreenMode.values[json["fullscreenMode"] as int];
+        fullscreen = json["fullscreen"] as int,
+        fullscreenClient = FullscreenState.values[json["fullscreenClient"]];
 }
 
 enum Corner {

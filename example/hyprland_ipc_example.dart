@@ -236,6 +236,11 @@ void main() async {
   print("=======");
   print(clients);
   print("=======");
+
+  await for (final event in hyprlandIPC.eventsStream) {
+    print(event);
+  }
+
   // print(version.dirty);
   // print(cursorPos.x);
   // print(version);
@@ -250,5 +255,5 @@ void main() async {
   // final test2 = await hyprlandIPC.runCommand(GetCursorPositionCommand());
   // print(test2.output);
   // print(test2.rawOutput);
-  hyprlandIPC.close();
+  // hyprlandIPC.close();
 }

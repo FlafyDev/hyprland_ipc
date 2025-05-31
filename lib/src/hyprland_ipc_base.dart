@@ -48,7 +48,7 @@ class HyprlandIPC {
   static Future<HyprlandIPC> fromInstance({String? instance, String? path}) async {
     assert(instance == null || path == null, "instance and path cannot both be provided");
     instance = instance ?? Platform.environment["HYPRLAND_INSTANCE_SIGNATURE"];
-    path = path ?? "/${Platform.environment["XDG_RUNTIME_DIR"]}/hypr/$instance";
+    path = path ?? "${Platform.environment["XDG_RUNTIME_DIR"]}/hypr/$instance";
     assert(instance != null);
     return HyprlandIPC(
       createSocketConnection: () async => await Socket.connect(

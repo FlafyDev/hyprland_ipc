@@ -132,14 +132,14 @@ class SetFloatingCommand extends ActionCommand {
 /// Toggles the focused window’s fullscreen state.
 class ToggleFullscreenActiveWindowCommand extends ActionCommand {
   const ToggleFullscreenActiveWindowCommand({
-    required this.mode,
+    required this.state,
   });
 
-  final FullscreenMode mode;
+  final FullscreenState state;
 
   @override
   String getCommand() {
-    return "dispatch fullscreen ${mode.index}";
+    return "dispatch fullscreen ${state.index}";
   }
 }
 
