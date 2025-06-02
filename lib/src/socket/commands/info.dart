@@ -37,7 +37,18 @@ class GetWorkspacesCommand extends Command<List<WorkspaceInfo>> {
   }
 }
 
-// TODO: activeworkspace - gets the active workspace and its properties
+// Assuming there is always an active workspace
+class GetActiveWorkspaceCommand extends Command<WorkspaceInfo> {
+  @override
+  String getCommand() => "j/activeworkspace";
+
+  @override
+  WorkspaceInfo processOutput(String rawOutput) {
+    final json = jsonDecode(rawOutput) as Map<String, Object?>;
+    return WorkspaceInfo.fromJson(json);
+  }
+}
+
 // TODO: workspacerules - gets the list of defined workspace rules
 
 class GetClientsCommand extends Command<List<ClientInfo>> {
