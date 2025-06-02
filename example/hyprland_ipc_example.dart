@@ -221,11 +221,13 @@ void main() async {
     monitors,
     workspaces,
     clients,
+    activeClient,
   ) = await (
     GetVersionCommand(),
     GetMonitorsCommand(),
     GetWorkspacesCommand(),
     GetClientsCommand(),
+    GetActiveClientCommand(),
   ).run(hyprlandIPC);
 
   print(version);
@@ -235,6 +237,8 @@ void main() async {
   print(workspaces);
   print("=======");
   print(clients);
+  print("=======");
+  print(activeClient);
   print("=======");
 
   await for (final event in hyprlandIPC.eventsStream) {

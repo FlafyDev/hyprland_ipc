@@ -51,10 +51,20 @@ class GetClientsCommand extends Command<List<ClientInfo>> {
   }
 }
 
+class GetActiveClientCommand extends Command<ClientInfo> {
+  @override
+  String getCommand() => "j/activewindow";
+
+  @override
+  ClientInfo processOutput(String rawOutput) {
+    final json = jsonDecode(rawOutput);
+    return ClientInfo.fromJson(json);
+  }
+}
+
 // TODO: devices - lists all connected keyboards and mice
 // TODO: decorations [window] - lists all decorations and their info
 // TODO: binds - lists all registered binds
-// TODO: activewindow - gets the active window name and its properties
 // TODO: layers - lists all the layers
 
 class GetSplashCommand extends OutputCommand {
