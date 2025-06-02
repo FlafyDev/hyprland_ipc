@@ -243,7 +243,7 @@ abstract class MonitorRef {
 }
 
 @freezed
-class MonitorRefDirection with _$MonitorRefDirection implements MonitorRef {
+abstract class MonitorRefDirection with _$MonitorRefDirection implements MonitorRef {
   const factory MonitorRefDirection({
     required Direction direction,
   }) = _MonitorRefDirection;
@@ -256,7 +256,7 @@ class MonitorRefDirection with _$MonitorRefDirection implements MonitorRef {
 }
 
 @freezed
-class MonitorRefID with _$MonitorRefID implements MonitorRef {
+abstract class MonitorRefID with _$MonitorRefID implements MonitorRef {
   const factory MonitorRefID({
     required int id,
   }) = _MonitorRefID;
@@ -269,7 +269,7 @@ class MonitorRefID with _$MonitorRefID implements MonitorRef {
 }
 
 @freezed
-class MonitorRefName with _$MonitorRefName implements MonitorRef {
+abstract class MonitorRefName with _$MonitorRefName implements MonitorRef {
   const factory MonitorRefName({
     required String name,
   }) = _MonitorRefName;
@@ -282,7 +282,7 @@ class MonitorRefName with _$MonitorRefName implements MonitorRef {
 }
 
 @freezed
-class MonitorRefCurrent with _$MonitorRefCurrent implements MonitorRef {
+abstract class MonitorRefCurrent with _$MonitorRefCurrent implements MonitorRef {
   const factory MonitorRefCurrent() = _MonitorRefCurrent;
   const MonitorRefCurrent._();
 
@@ -293,7 +293,7 @@ class MonitorRefCurrent with _$MonitorRefCurrent implements MonitorRef {
 }
 
 @freezed
-class MonitorRefRelativeID with _$MonitorRefRelativeID implements MonitorRef {
+abstract class MonitorRefRelativeID with _$MonitorRefRelativeID implements MonitorRef {
   const factory MonitorRefRelativeID({
     required int id,
   }) = _MonitorRefRelativeID;
@@ -352,7 +352,7 @@ abstract class WindowRef {
 }
 
 @freezed
-class WindowRefClass with _$WindowRefClass implements WindowRef {
+abstract class WindowRefClass with _$WindowRefClass implements WindowRef {
   const factory WindowRefClass({
     required String classRegex,
   }) = _WindowRefClass;
@@ -365,7 +365,7 @@ class WindowRefClass with _$WindowRefClass implements WindowRef {
 }
 
 @freezed
-class WindowRefInitialClass with _$WindowRefInitialClass implements WindowRef {
+abstract class WindowRefInitialClass with _$WindowRefInitialClass implements WindowRef {
   const factory WindowRefInitialClass({
     required String classRegex,
   }) = _WindowRefInitialClass;
@@ -378,7 +378,7 @@ class WindowRefInitialClass with _$WindowRefInitialClass implements WindowRef {
 }
 
 @freezed
-class WindowRefTitle with _$WindowRefTitle implements WindowRef {
+abstract class WindowRefTitle with _$WindowRefTitle implements WindowRef {
   const factory WindowRefTitle({
     required String titleRegex,
   }) = _WindowRefTitle;
@@ -391,7 +391,7 @@ class WindowRefTitle with _$WindowRefTitle implements WindowRef {
 }
 
 @freezed
-class WindowRefInitialTitle with _$WindowRefInitialTitle implements WindowRef {
+abstract class WindowRefInitialTitle with _$WindowRefInitialTitle implements WindowRef {
   const factory WindowRefInitialTitle({
     required String titleRegex,
   }) = _WindowRefInitialTitle;
@@ -404,7 +404,7 @@ class WindowRefInitialTitle with _$WindowRefInitialTitle implements WindowRef {
 }
 
 @freezed
-class WindowRefPid with _$WindowRefPid implements WindowRef {
+abstract class WindowRefPid with _$WindowRefPid implements WindowRef {
   const factory WindowRefPid({
     required int pid,
   }) = _WindowRefPid;
@@ -417,7 +417,7 @@ class WindowRefPid with _$WindowRefPid implements WindowRef {
 }
 
 @freezed
-class WindowRefAddress with _$WindowRefAddress implements WindowRef {
+abstract class WindowRefAddress with _$WindowRefAddress implements WindowRef {
   const factory WindowRefAddress({
     required int address,
   }) = _WindowRefAddress;
@@ -432,7 +432,7 @@ class WindowRefAddress with _$WindowRefAddress implements WindowRef {
 }
 
 @freezed
-class WindowRefActiveWindow with _$WindowRefActiveWindow implements WindowRef {
+abstract class WindowRefActiveWindow with _$WindowRefActiveWindow implements WindowRef {
   const factory WindowRefActiveWindow() = _WindowRefActiveWindow;
   const WindowRefActiveWindow._();
 
@@ -443,7 +443,7 @@ class WindowRefActiveWindow with _$WindowRefActiveWindow implements WindowRef {
 }
 
 @freezed
-class WindowRefFirstFloating with _$WindowRefFirstFloating implements WindowRef {
+abstract class WindowRefFirstFloating with _$WindowRefFirstFloating implements WindowRef {
   const factory WindowRefFirstFloating() = _WindowRefFirstFloating;
   const WindowRefFirstFloating._();
 
@@ -454,7 +454,7 @@ class WindowRefFirstFloating with _$WindowRefFirstFloating implements WindowRef 
 }
 
 @freezed
-class WindowRefFirstTiled with _$WindowRefFirstTiled implements WindowRef {
+abstract class WindowRefFirstTiled with _$WindowRefFirstTiled implements WindowRef {
   const factory WindowRefFirstTiled() = _WindowRefFirstTiled;
   const WindowRefFirstTiled._();
 
@@ -507,7 +507,7 @@ class LayerSurface {
 }
 
 @Freezed(toJson: false)
-class MonitorInfoReserved with _$MonitorInfoReserved {
+abstract class MonitorInfoReserved with _$MonitorInfoReserved {
   const factory MonitorInfoReserved({
     required int left,
     required int top,
@@ -524,7 +524,7 @@ class MonitorInfoReserved with _$MonitorInfoReserved {
 }
 
 @Freezed(toJson: false)
-class MonitorInfoWorkspace with _$MonitorInfoWorkspace {
+abstract class MonitorInfoWorkspace with _$MonitorInfoWorkspace {
   const factory MonitorInfoWorkspace({
     // required WorkspaceRefID id, // TODO: move them to freezed and make tojson
     // required WorkspaceRefName name, // TODO: move them to freezed and make tojson
@@ -536,7 +536,7 @@ class MonitorInfoWorkspace with _$MonitorInfoWorkspace {
 }
 
 @Freezed(toJson: false)
-class MonitorInfoMode with _$MonitorInfoMode {
+abstract class MonitorInfoMode with _$MonitorInfoMode {
   const factory MonitorInfoMode({
     required int width,
     required int height,
@@ -551,7 +551,7 @@ class MonitorInfoMode with _$MonitorInfoMode {
 }
 
 @Freezed(toJson: false)
-class MonitorInfo with _$MonitorInfo {
+abstract class MonitorInfo with _$MonitorInfo {
   const factory MonitorInfo({
     required int id,
     required String name,
@@ -579,7 +579,7 @@ class MonitorInfo with _$MonitorInfo {
 }
 
 @Freezed(toJson: false)
-class WorkspaceInfo with _$WorkspaceInfo {
+abstract class WorkspaceInfo with _$WorkspaceInfo {
   const factory WorkspaceInfo({
     required int id,
     required String name,
@@ -596,7 +596,7 @@ class WorkspaceInfo with _$WorkspaceInfo {
 typedef ClientInfoWorkspace = MonitorInfoWorkspace;
 
 @Freezed(toJson: false)
-class ClientInfo with _$ClientInfo {
+abstract class ClientInfo with _$ClientInfo {
   const factory ClientInfo({
     required WindowRefAddress address,
     @_EmptyRect() required Rectangle rect,
