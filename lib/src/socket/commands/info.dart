@@ -51,13 +51,16 @@ class GetClientsCommand extends Command<List<ClientInfo>> {
   }
 }
 
-class GetActiveClientCommand extends Command<ClientInfo> {
+class GetActiveClientCommand extends Command<ClientInfo?> {
   @override
   String getCommand() => "j/activewindow";
 
   @override
-  ClientInfo processOutput(String rawOutput) {
-    final json = jsonDecode(rawOutput);
+  ClientInfo? processOutput(String rawOutput) {
+    final json = jsonDecode(rawOutput) as Map<String, Object?>;
+    if (json.keys.isEmpty) {
+      return null;
+    }
     return ClientInfo.fromJson(json);
   }
 }
